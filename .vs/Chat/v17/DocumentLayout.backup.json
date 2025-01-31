@@ -1,0 +1,37 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "B:\\Chat C\u002B\u002B\\Chat\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{2D0C69EC-B283-4EF2-8D23-1283D4351B19}|Chat\\Chat.vcxproj|B:\\Chat C\u002B\u002B\\Chat\\Chat\\Chat.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{2D0C69EC-B283-4EF2-8D23-1283D4351B19}|Chat\\Chat.vcxproj|solutionrelative:Chat\\Chat.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Chat.cpp",
+              "DocumentMoniker": "B:\\Chat C\u002B\u002B\\Chat\\Chat\\Chat.cpp",
+              "RelativeDocumentMoniker": "Chat\\Chat.cpp",
+              "ToolTip": "B:\\Chat C\u002B\u002B\\Chat\\Chat\\Chat.cpp",
+              "RelativeToolTip": "Chat\\Chat.cpp",
+              "ViewState": "AgIAAJ0AAAAAAAAAAAAYwNsAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2025-01-31T10:45:07.753Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
