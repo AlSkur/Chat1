@@ -1,12 +1,12 @@
-#include <iostream>
+я╗┐#include <iostream>
 #include <string>
+#include <vector>
+#include <algorithm>
+#include <locale> 
 
 using namespace std;
 
-const int MAX_USERS = 100; // Максимальное количество пользователей
-const int MAX_MESSAGES = 1000; // Максимальное количество сообщений
-
-// Класс для хранения данных пользователя
+// ╨Ъ╨╗╨░╤Б╤Б ╨┤╨╗╤П ╤Е╤А╨░╨╜╨╡╨╜╨╕╤П ╨┤╨░╨╜╨╜╤Л╤Е ╨┐╨╛╨╗╤М╨╖╨╛╨▓╨░╤В╨╡╨╗╤П
 class User {
 public:
     string login;
@@ -19,161 +19,148 @@ public:
         : login(l), password(p), name(n) {}
 };
 
-// Класс для управления чатом
+// ╨Ъ╨╗╨░╤Б╤Б ╨┤╨╗╤П ╤Г╨┐╤А╨░╨▓╨╗╨╡╨╜╨╕╤П ╤З╨░╤В╨╛╨╝
 class Chat {
 private:
-    User users[MAX_USERS]; // Массив пользователей
-    int userCount = 0; // Текущее количество пользователей
+    vector<User> users;
+    vector<string> messageSenders;
+    vector<string> messageRecipients;
+    vector<string> messageTexts;
 
-    // Массивы для хранения сообщений
-    string messageSenders[MAX_MESSAGES];
-    string messageRecipients[MAX_MESSAGES];
-    string messageTexts[MAX_MESSAGES];
-    int messageCount = 0; // Текущее количество сообщений
-
-    // Текущий пользователь
     string currentUserLogin = "";
 
-    // Поиск пользователя по логину
-    int findUserByLogin(string login) {
-        for (int i = 0; i < userCount; i++) {
-            if (users[i].login == login) {
-                return i; // Возвращаем индекс пользователя
-            }
+    int findUserByLogin(const string& login) {
+        auto it = find_if(users.begin(), users.end(), [&login](const User& user) {
+            return user.login == login;
+            });
+        if (it != users.end()) {
+            return distance(users.begin(), it);
         }
-        return -1; // Пользователь не найден
+        return -1;
     }
 
 public:
-    // Регистрация нового пользователя
+    // ╨а╨╡╨│╨╕╤Б╤В╤А╨░╤Ж╨╕╤П ╨╜╨╛╨▓╨╛╨│╨╛ ╨┐╨╛╨╗╤М╨╖╨╛╨▓╨░╤В╨╡╨╗╤П
     void registerUser() {
-        if (userCount >= MAX_USERS) {
-            cout << "Достигнуто максимальное количество пользователей.\n";
-            return;
-        }
-
         string login, password, name;
-        cout << "Регистрация нового пользователя\n";
-        cout << "Введите логин: ";
+        cout << "╨а╨╡╨│╨╕╤Б╤В╤А╨░╤Ж╨╕╤П ╨╜╨╛╨▓╨╛╨│╨╛ ╨┐╨╛╨╗╤М╨╖╨╛╨▓╨░╤В╨╡╨╗╤П\n";
+        cout << "╨Т╨▓╨╡╨┤╨╕╤В╨╡ ╨╗╨╛╨│╨╕╨╜: ";
         cin >> login;
-        cout << "Введите пароль: ";
+        cout << "╨Т╨▓╨╡╨┤╨╕╤В╨╡ ╨┐╨░╤А╨╛╨╗╤М: ";
         cin >> password;
-        cout << "Введите имя: ";
+        cout << "╨Т╨▓╨╡╨┤╨╕╤В╨╡ ╨╕╨╝╤П: ";
         cin >> name;
 
         if (findUserByLogin(login) == -1) {
-            users[userCount] = User(login, password, name);
-            userCount++;
-            cout << "Пользователь зарегистрирован!\n";
+            users.emplace_back(login, password, name);
+            cout << "╨Я╨╛╨╗╤М╨╖╨╛╨▓╨░╤В╨╡╨╗╤М ╨╖╨░╤А╨╡╨│╨╕╤Б╤В╤А╨╕╤А╨╛╨▓╨░╨╜!\n";
         }
         else {
-            cout << "Пользователь с таким логином уже существует.\n";
+            cout << "╨Я╨╛╨╗╤М╨╖╨╛╨▓╨░╤В╨╡╨╗╤М ╤Б ╤В╨░╨║╨╕╨╝ ╨╗╨╛╨│╨╕╨╜╨╛╨╝ ╤Г╨╢╨╡ ╤Б╤Г╤Й╨╡╤Б╤В╨▓╤Г╨╡╤В.\n";
         }
     }
 
-    // Вход в систему
+    // ╨Т╤Е╨╛╨┤ ╨▓ ╤Б╨╕╤Б╤В╨╡╨╝╤Г
     void login() {
         string login, password;
-        cout << "Вход в чат\n";
-        cout << "Введите логин: ";
+        cout << "╨Т╤Е╨╛╨┤ ╨▓ ╤З╨░╤В\n";
+        cout << "╨Т╨▓╨╡╨┤╨╕╤В╨╡ ╨╗╨╛╨│╨╕╨╜: ";
         cin >> login;
-        cout << "Введите пароль: ";
+        cout << "╨Т╨▓╨╡╨┤╨╕╤В╨╡ ╨┐╨░╤А╨╛╨╗╤М: ";
         cin >> password;
 
         int userIndex = findUserByLogin(login);
         if (userIndex != -1 && users[userIndex].password == password) {
             currentUserLogin = login;
-            cout << "Добро пожаловать, " << users[userIndex].name << "!\n";
+            cout << "╨Ф╨╛╨▒╤А╨╛ ╨┐╨╛╨╢╨░╨╗╨╛╨▓╨░╤В╤М, " << users[userIndex].name << "!\n";
 
-            // Показываем сообщения для текущего пользователя
-            cout << "Ваши сообщения:\n";
-            for (int i = 0; i < messageCount; i++) {
+
+            cout << "╨Т╨░╤И╨╕ ╤Б╨╛╨╛╨▒╤Й╨╡╨╜╨╕╤П:\n";
+            for (size_t i = 0; i < messageTexts.size(); i++) {
                 if (messageRecipients[i] == currentUserLogin) {
-                    cout << "От: " << messageSenders[i] << " | Сообщение: " << messageTexts[i] << "\n";
+                    cout << "╨Ю╤В: " << messageSenders[i] << " | ╨б╨╛╨╛╨▒╤Й╨╡╨╜╨╕╨╡: " << messageTexts[i] << "\n";
                 }
             }
         }
         else {
-            cout << "Неверный логин или пароль.\n";
+            cout << "╨Э╨╡╨▓╨╡╤А╨╜╤Л╨╣ ╨╗╨╛╨│╨╕╨╜ ╨╕╨╗╨╕ ╨┐╨░╤А╨╛╨╗╤М.\n";
         }
     }
 
-    // Выход из системы
+    // ╨Т╤Л╤Е╨╛╨┤ ╨╕╨╖ ╤Б╨╕╤Б╤В╨╡╨╝╤Л
     void logout() {
         if (currentUserLogin != "") {
-            cout << "Вы вышли из аккаунта.\n";
+            cout << "╨Т╤Л ╨▓╤Л╤И╨╗╨╕ ╨╕╨╖ ╨░╨║╨║╨░╤Г╨╜╤В╨░.\n";
             currentUserLogin = "";
         }
         else {
-            cout << "Вы не вошли в систему.\n";
+            cout << "╨Т╤Л ╨╜╨╡ ╨▓╨╛╤И╨╗╨╕ ╨▓ ╤Б╨╕╤Б╤В╨╡╨╝╤Г.\n";
         }
     }
 
-    // Отправка сообщения конкретному пользователю
+    // ╨Ю╤В╨┐╤А╨░╨▓╨║╨░ ╤Б╨╛╨╛╨▒╤Й╨╡╨╜╨╕╤П ╨║╨╛╨╜╨║╤А╨╡╤В╨╜╨╛╨╝╤Г ╨┐╨╛╨╗╤М╨╖╨╛╨▓╨░╤В╨╡╨╗╤О
     void sendMessageToUser() {
         if (currentUserLogin == "") {
-            cout << "Сначала войдите в систему.\n";
+            cout << "╨б╨╜╨░╤З╨░╨╗╨░ ╨▓╨╛╨╣╨┤╨╕╤В╨╡ ╨▓ ╤Б╨╕╤Б╤В╨╡╨╝╤Г.\n";
             return;
         }
 
         string recipientLogin, message;
-        cout << "Введите логин получателя: ";
+        cout << "╨Т╨▓╨╡╨┤╨╕╤В╨╡ ╨╗╨╛╨│╨╕╨╜ ╨┐╨╛╨╗╤Г╤З╨░╤В╨╡╨╗╤П: ";
         cin >> recipientLogin;
-        cout << "Введите сообщение: ";
-        cin.ignore(); // Игнорируем предыдущий ввод
+        cout << "╨Т╨▓╨╡╨┤╨╕╤В╨╡ ╤Б╨╛╨╛╨▒╤Й╨╡╨╜╨╕╨╡: ";
+        cin.ignore();
         getline(cin, message);
 
         if (findUserByLogin(recipientLogin) != -1) {
-            messageSenders[messageCount] = currentUserLogin;
-            messageRecipients[messageCount] = recipientLogin;
-            messageTexts[messageCount] = message;
-            messageCount++;
-            cout << "Сообщение отправлено.\n";
+            messageSenders.push_back(currentUserLogin);
+            messageRecipients.push_back(recipientLogin);
+            messageTexts.push_back(message);
+            cout << "╨б╨╛╨╛╨▒╤Й╨╡╨╜╨╕╨╡ ╨╛╤В╨┐╤А╨░╨▓╨╗╨╡╨╜╨╛.\n";
         }
         else {
-            cout << "Пользователь с таким логином не найден.\n";
+            cout << "╨Я╨╛╨╗╤М╨╖╨╛╨▓╨░╤В╨╡╨╗╤М ╤Б ╤В╨░╨║╨╕╨╝ ╨╗╨╛╨│╨╕╨╜╨╛╨╝ ╨╜╨╡ ╨╜╨░╨╣╨┤╨╡╨╜.\n";
         }
     }
 
-    // Отправка сообщения всем пользователям
+    // ╨Ю╤В╨┐╤А╨░╨▓╨║╨░ ╤Б╨╛╨╛╨▒╤Й╨╡╨╜╨╕╤П ╨▓╤Б╨╡╨╝ ╨┐╨╛╨╗╤М╨╖╨╛╨▓╨░╤В╨╡╨╗╤П╨╝
     void broadcastMessage() {
         if (currentUserLogin == "") {
-            cout << "Сначала войдите в систему.\n";
+            cout << "╨б╨╜╨░╤З╨░╨╗╨░ ╨▓╨╛╨╣╨┤╨╕╤В╨╡ ╨▓ ╤Б╨╕╤Б╤В╨╡╨╝╤Г.\n";
             return;
         }
 
         string message;
-        cout << "Введите сообщение для всех: ";
-        cin.ignore(); // Игнорируем предыдущий ввод
+        cout << "╨Т╨▓╨╡╨┤╨╕╤В╨╡ ╤Б╨╛╨╛╨▒╤Й╨╡╨╜╨╕╨╡ ╨┤╨╗╤П ╨▓╤Б╨╡╤Е: ";
+        cin.ignore();
         getline(cin, message);
 
-        for (int i = 0; i < userCount; i++) {
-            if (users[i].login != currentUserLogin) {
-                messageSenders[messageCount] = currentUserLogin;
-                messageRecipients[messageCount] = users[i].login;
-                messageTexts[messageCount] = message;
-                messageCount++;
+        for (const auto& user : users) {
+            if (user.login != currentUserLogin) {
+                messageSenders.push_back(currentUserLogin);
+                messageRecipients.push_back(user.login);
+                messageTexts.push_back(message);
             }
         }
-        cout << "Сообщение отправлено всем пользователям.\n";
+        cout << "╨б╨╛╨╛╨▒╤Й╨╡╨╜╨╕╨╡ ╨╛╤В╨┐╤А╨░╨▓╨╗╨╡╨╜╨╛ ╨▓╤Б╨╡╨╝ ╨┐╨╛╨╗╤М╨╖╨╛╨▓╨░╤В╨╡╨╗╤П╨╝.\n";
     }
 
-    // Главное меню
+    // ╨У╨╗╨░╨▓╨╜╨╛╨╡ ╨╝╨╡╨╜╤О
     void showMenu() {
         int choice;
         do {
-            cout << "\nМеню:\n";
+            cout << "\n╨Ь╨╡╨╜╤О:\n";
             if (currentUserLogin == "") {
-                cout << "1. Регистрация\n";
-                cout << "2. Вход\n";
+                cout << "1. ╨а╨╡╨│╨╕╤Б╤В╤А╨░╤Ж╨╕╤П\n";
+                cout << "2. ╨Т╤Е╨╛╨┤\n";
             }
             else {
-                cout << "1. Отправить сообщение пользователю\n";
-                cout << "2. Отправить сообщение всем\n";
-                cout << "3. Выйти из аккаунта\n";
+                cout << "1. ╨Ю╤В╨┐╤А╨░╨▓╨╕╤В╤М ╤Б╨╛╨╛╨▒╤Й╨╡╨╜╨╕╨╡ ╨┐╨╛╨╗╤М╨╖╨╛╨▓╨░╤В╨╡╨╗╤О\n";
+                cout << "2. ╨Ю╤В╨┐╤А╨░╨▓╨╕╤В╤М ╤Б╨╛╨╛╨▒╤Й╨╡╨╜╨╕╨╡ ╨▓╤Б╨╡╨╝\n";
+                cout << "3. ╨Т╤Л╨╣╤В╨╕ ╨╕╨╖ ╨░╨║╨║╨░╤Г╨╜╤В╨░\n";
             }
-            cout << "0. Выход\n";
-            cout << "Выберите действие: ";
+            cout << "0. ╨Т╤Л╤Е╨╛╨┤\n";
+            cout << "╨Т╤Л╨▒╨╡╤А╨╕╤В╨╡ ╨┤╨╡╨╣╤Б╤В╨▓╨╕╨╡: ";
             cin >> choice;
 
             if (currentUserLogin == "") {
@@ -185,10 +172,10 @@ public:
                     login();
                     break;
                 case 0:
-                    cout << "Выход из программы.\n";
+                    cout << "╨Т╤Л╤Е╨╛╨┤ ╨╕╨╖ ╨┐╤А╨╛╨│╤А╨░╨╝╨╝╤Л.\n";
                     break;
                 default:
-                    cout << "Неверный выбор. Попробуйте снова.\n";
+                    cout << "╨Э╨╡╨▓╨╡╤А╨╜╤Л╨╣ ╨▓╤Л╨▒╨╛╤А. ╨Я╨╛╨┐╤А╨╛╨▒╤Г╨╣╤В╨╡ ╤Б╨╜╨╛╨▓╨░.\n";
                 }
             }
             else {
@@ -203,10 +190,10 @@ public:
                     logout();
                     break;
                 case 0:
-                    cout << "Выход из программы.\n";
+                    cout << "╨Т╤Л╤Е╨╛╨┤ ╨╕╨╖ ╨┐╤А╨╛╨│╤А╨░╨╝╨╝╤Л.\n";
                     break;
                 default:
-                    cout << "Неверный выбор. Попробуйте снова.\n";
+                    cout << "╨Э╨╡╨▓╨╡╤А╨╜╤Л╨╣ ╨▓╤Л╨▒╨╛╤А. ╨Я╨╛╨┐╤А╨╛╨▒╤Г╨╣╤В╨╡ ╤Б╨╜╨╛╨▓╨░.\n";
                 }
             }
         } while (choice != 0);
@@ -214,6 +201,7 @@ public:
 };
 
 int main() {
+    setlocale(LC_ALL, "Russian");
     Chat chat;
     chat.showMenu();
     return 0;
